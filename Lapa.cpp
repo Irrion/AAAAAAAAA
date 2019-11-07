@@ -27,17 +27,17 @@ public:
 	{
 		if (size == 0)
 		{
-			JoJo *current = new JoJo(e);
-			DANIIL = current;
+			DANIIL = new JoJo(e);
 		}
 		else
 		{
-			JoJo *current = DANIIL;
-			while (current->nextJoJo != nullptr)
+			JoJo *last_elem = DANIIL;
+			while (last_elem->nextJoJo != nullptr)
 			{
-				current = current->nextJoJo;
+				last_elem = last_elem->nextJoJo;
 			}
-			current->nextJoJo = new JoJo(e);
+			// last_elem
+			last_elem->nextJoJo = new JoJo(e);
 		}
 		size++;
 	}
@@ -45,7 +45,7 @@ public:
 	{
 		return size;
 	}
-	int & operator[](unsigned int index);
+	
 	void popfrant()
 	{
 		JoJo *current = DANIIL;
@@ -55,16 +55,43 @@ public:
 	}
 	void mrproper()
 	{
-		for (int i = 0; i < size; i++)
+		int full_size = size;
+		for (; 0 < size; ) // 4
 		{
 			popfrant();
+			//4
+			
 		}
 	}
-	void insert()
+	int find(int index)
 	{
-
+		
+		JoJo * current = this->DANIIL;
+		int counter = 1;
+		while (current != nullptr)
+		{
+			if (index == counter)
+			{
+				return current->Elin;
+			}
+			current = current->nextJoJo;
+			counter++;
+		}
+		return 0;
 	}
-	void pop(unsigned int index)
+	void alllist()
+	{
+		
+		JoJo *current = DANIIL;
+		while (current != nullptr)
+		{
+			cout << current->Elin << endl;
+			current = current->nextJoJo;
+		}
+		
+	
+	}
+	void pop(int index)
 	{
 		if (DANIIL != nullptr)
 		{
@@ -134,41 +161,32 @@ private:
 	JoJo *DANIIL;
 };
 
-int & List::operator[](unsigned int index)
-{
-	JoJo *current = DANIIL;
-	for (int i = 0; i < size; i++)
-	{
-		if (i == index)
-		{
-			return current->Elin;
-		}
-		else
-		{
-			current = current->nextJoJo;
-		}
-	}
-	abort();
-}
 
 int main()
 {
 	List Vedeneev;
+	
 	Vedeneev.add(1);
 	Vedeneev.add(2);
 	Vedeneev.add(3);
 	Vedeneev.add(4);
 	Vedeneev.add(5);
 	Vedeneev.add(6);
-	Vedeneev.pop(1);
+	cout <<"Size= " << Vedeneev.retorn() << endl;
+	Vedeneev.alllist();
 	
-	for (int i = 0; i < Vedeneev.retorn(); i++)
-	{
-		cout << "[" << i + 1 << "]" << Vedeneev[i] << endl;
-	}
-	cout << Vedeneev.retorn() << endl;
+	cout<<"The element at index = "<<Vedeneev.find(3)<<endl;
+
 	
+	Vedeneev.mrproper();
 	system("pause");
 	return 0;
 }
+
+
+
+
+
+
+
 
