@@ -36,7 +36,7 @@ public:
 			{
 				last_elem = last_elem->nextJoJo;
 			}
-			// last_elem
+			
 			last_elem->nextJoJo = new JoJo(e);
 		}
 		size++;
@@ -56,10 +56,10 @@ public:
 	void mrproper()
 	{
 		int full_size = size;
-		for (; 0 < size; ) // 4
+		for (; 0 < size; ) 
 		{
 			popfrant();
-			//4
+			
 			
 		}
 	}
@@ -135,7 +135,7 @@ public:
 			}
 			else
 			{
-				cout << "Are you diabetic? Tut net takogo" << endl;
+				cout << "Are you diabetic? There's no such thing here" << endl;
 			}
 	
 		}
