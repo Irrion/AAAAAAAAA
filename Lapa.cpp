@@ -1,14 +1,16 @@
 #include <iostream>
 using namespace std;
 
-struct JoJo
+struct Node
 {
-	int Elin;
-	JoJo *nextJoJo;
-	JoJo(int Volodya, JoJo *next = nullptr)
+	int data;
+	Node *nElem;
+	Node *pElem;
+	Node(int data, Node *next = nullptr, Node*prev = nullptr)
 	{
-		this->Elin = Volodya;
-		this->nextJoJo = next;
+		this->data = data;
+		this->nElem = next;
+		this->pElem = prev;
 	}
 };
 class List
@@ -17,86 +19,164 @@ public:
 	List()
 	{
 		size = 0;
-		DANIIL = nullptr;
+		HEAD = nullptr;
+		tail = nullptr;
 	}
-    ~List()
+	~List()
 	{
 		mrproper();
 	}
-	void add(int e)
-	{
-		if (size == 0)
+	void add_end(int e)
+	{		
+		Node *last_elem = new Node(e);
+		last_elem->nElem = nullptr;
+
+		if (HEAD != nullptr)
 		{
-			DANIIL = new JoJo(e);
+			last_elem->pElem = tail;
+			tail->nElem = last_elem;
+			tail = last_elem;
 		}
 		else
 		{
-			JoJo *last_elem = DANIIL;
-			while (last_elem->nextJoJo != nullptr)
-			{
-				last_elem = last_elem->nextJoJo;
-			}
-			
-			last_elem->nextJoJo = new JoJo(e);
+			last_elem->pElem = nullptr;
+			HEAD = tail = last_elem;
 		}
+		size++;
+	}
+	void add_begin(int data)
+	{
+		Node*new_elem = HEAD;
+		if (HEAD != nullptr)
+		{
+			HEAD = new Node(data, HEAD);
+			new_elem->pElem = HEAD;
+		}
+		else
+		{
+			HEAD = tail = new Node(data, HEAD, tail);
+		}	
 		size++;
 	}
 	int retorn()
 	{
 		return size;
 	}
-	
 	void popfrant()
 	{
-		JoJo *current = DANIIL;
-		DANIIL = DANIIL->nextJoJo;
-		delete current;
+		Node *current = HEAD;
+		if (HEAD != nullptr)
+		{
+			HEAD = HEAD->nElem;
+			delete current;
+		}
+		else
+		{
+			cout << "The list is empty\n";
+		}
+		size--;
+	}
+	void popback()
+	{
+		Node*current = tail;
+		if (tail != nullptr)
+		{
+			tail = tail->pElem;
+			delete current;
+		}
+		else
+		{
+			cout << "The list is empty\n";
+		}
 		size--;
 	}
 	void mrproper()
 	{
 		int full_size = size;
-		for (; 0 < size; ) 
+		for (; 0 < size - 1; )
 		{
 			popfrant();
-			
-			
 		}
 	}
 	int find(int index)
-	{
-		
-		JoJo * current = this->DANIIL;
+	{		
 		int counter = 1;
-		while (current != nullptr)
+		if (index > this->size / 2)
 		{
-			if (index == counter)
+			Node*current = HEAD;
+				while (current != nullptr)
+				{
+					if (index == counter)
+					{
+						return current->data;
+					}
+					current = current->nElem;
+					counter++;
+				}
+		}
+		else
+		{
+			Node*current = tail;
+			while (current != nullptr)
 			{
-				return current->Elin;
+				if (index == counter)
+				{
+					return current->data;
+				}
+				current = current->pElem;
+				counter++;
 			}
-			current = current->nextJoJo;
-			counter++;
 		}
 		return 0;
 	}
 	void alllist()
 	{
-		
-		JoJo *current = DANIIL;
+		cout << "Starts from the head\n";
+		Node *current = HEAD;
 		while (current != nullptr)
 		{
-			cout << current->Elin << endl;
-			current = current->nextJoJo;
+			cout << current->data << endl;
+			current = current->nElem;
 		}
-		
-	
+		cout << "\n";
+
+		cout << "Starts from the tail\n";
+		current = tail;
+		while (current != nullptr)
+		{
+			cout << current->data << endl;
+			current = current->pElem;
+		}
+		cout << "\n";
+	}
+	void print_from_head()
+	{
+		cout << "Starts from the head\n";
+		Node *current = HEAD;
+		while (current != nullptr)
+		{
+			cout << current->data << endl;
+			current = current->nElem;
+		}
+		cout << "\n";
+	}
+	void print_from_tail()
+	{
+		Node *current = tail;
+		cout << "Starts from the tail\n";
+		while (current != nullptr)
+		{
+			cout << current->data << endl;
+			current = current->pElem;
+		}
+		cout << "\n";
 	}
 	void pop(int index)
 	{
-		if (DANIIL != nullptr)
+		if (HEAD != nullptr)
 		{
 
-			if (index==1)
+			if (index == 1)
 			{
 				popfrant();
 			}
@@ -104,30 +184,54 @@ public:
 			{
 				if (size < index)
 				{
-					cout << "I NOT FOUND ELEMENT!!! AAAAAAAAA" << endl;
+					cout << "I NOT FOUND ELEMENT!!!" << endl;
 				}
 				else if (size == index || size > index)
 				{
-					
-					JoJo *current = DANIIL; 
-					int mama = index - 2 ;
-					for (int i = 0; i < mama; i++)
+					if (index <= size)
 					{
-						current = current->nextJoJo;
+						Node *current = HEAD;
+						int mama = index - 2;
+						for (int i = 0; i < mama; i++)
+						{
+							current = current->nElem;
+						}
+						Node *daughter = current;
+						current = current->nElem;
+						if (current->nElem != nullptr)
+						{
+							daughter->nElem = current->nElem;
+							delete current;
+							--size;
+						}
+						else
+						{
+							daughter->nElem = nullptr;
+							delete current;
+							size--;
+						}
 					}
-					JoJo *mamulya = current;
-					current = current->nextJoJo;
-					if (current->nextJoJo != nullptr)
+					else if (index > size / 2)
 					{
-						mamulya->nextJoJo = current->nextJoJo;
-						delete current;
-						--size;
-					}
-					else
-					{
-						mamulya->nextJoJo = nullptr;
-						delete current;
-						size--;
+						Node*current = tail;						
+						for (int i = size - 2; i > index; i--)
+						{
+							current = current->pElem;
+						}
+						Node*prev = current;
+						current = current->pElem;
+						if (current->pElem!=nullptr)
+						{
+							prev->pElem = current->pElem;
+							delete current;
+							size--;
+						}
+						else
+						{
+							prev->pElem = nullptr;
+							delete current;
+							size--;
+						}
 					}
 
 				}
@@ -135,13 +239,13 @@ public:
 			}
 			else
 			{
-				cout << "Are you diabetic? There's no such thing here" << endl;
+				cout << "There's no such thing here" << endl;
 			}
-	
+
 		}
 		else
 		{
-			cout << "Net ego" << endl;
+			cout << "List is empty" << endl;
 		}
 	}
 	bool empty()
@@ -157,31 +261,36 @@ public:
 	}
 private:
 	int size;
-	
-	JoJo *DANIIL;
+	Node *tail;
+	Node *HEAD;
 };
 
 
 int main()
 {
-	List Vedeneev;
+	List lst;
 	
-	Vedeneev.add(1);
-	Vedeneev.add(2);
-	Vedeneev.add(3);
-	Vedeneev.add(4);
-	Vedeneev.add(5);
-	Vedeneev.add(6);
-	cout <<"Size= " << Vedeneev.retorn() << endl;
-	Vedeneev.alllist();
-	
-	cout<<"The element at index = "<<Vedeneev.find(3)<<endl;
+	lst.add_end(1);
+	lst.add_end(2);
+	lst.add_end(3);
+	lst.add_end(4);
+	lst.add_end(5);
+	lst.add_end(6);
+	lst.add_begin(9);
 
+	lst.print_from_head();
+	cout <<"Size= " << lst.retorn() << endl;
+	cout << "\n";
+
+	lst.pop(6);
+	lst.print_from_head();
 	
-	Vedeneev.mrproper();
 	system("pause");
 	return 0;
 }
+
+
+
 
 
 
