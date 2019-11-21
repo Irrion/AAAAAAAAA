@@ -64,11 +64,20 @@ public:
 	}
 	void popfrant()
 	{
-		Node *current = HEAD;
 		if (HEAD != nullptr)
 		{
-			HEAD = HEAD->nElem;
-			delete current;
+			Node *current = HEAD;
+			if (HEAD->nElem != nullptr)
+			{
+				HEAD = HEAD->nElem;
+				delete current;
+			}
+			else
+			{
+				delete HEAD;
+				HEAD = nullptr;
+				tail = nullptr;
+			}
 		}
 		else
 		{
@@ -78,11 +87,20 @@ public:
 	}
 	void popback()
 	{
-		Node*current = tail;
 		if (tail != nullptr)
 		{
-			tail = tail->pElem;
-			delete current;
+			Node*current = tail;
+			if (tail->pElem != nullptr)
+			{
+				tail = tail->pElem;
+				delete current;
+			}
+			else
+			{
+				delete tail;
+				HEAD = nullptr;
+				tail = nullptr;
+			}
 		}
 		else
 		{
@@ -93,7 +111,7 @@ public:
 	void mrproper()
 	{
 		int full_size = size;
-		for (; 0 < size - 1; )
+		for (; 0 < size; )
 		{
 			popfrant();
 		}
@@ -175,7 +193,6 @@ public:
 	{
 		if (HEAD != nullptr)
 		{
-
 			if (index == 1)
 			{
 				popfrant();
@@ -265,11 +282,9 @@ private:
 	Node *HEAD;
 };
 
-
-int main()
-{
+void origin() {
 	List lst;
-	
+
 	lst.add_end(1);
 	lst.add_end(2);
 	lst.add_end(3);
@@ -279,11 +294,54 @@ int main()
 	lst.add_begin(9);
 
 	lst.print_from_head();
-	cout <<"Size= " << lst.retorn() << endl;
+	cout << "Size= " << lst.retorn() << endl;
 	cout << "\n";
 
 	lst.pop(6);
 	lst.print_from_head();
+}
+
+
+
+void test_1() {
+	List ll;
+	ll.add_end(1);
+	ll.pop(1);
+	ll.print_from_tail();
+}
+
+void test_2() {
+	List ll;
+	ll.add_end(1);
+	ll.add_end(2);
+	ll.pop(1);
+	ll.print_from_head();
+}
+void test_3() {
+	List ll;
+	ll.add_end(1);
+	ll.add_begin(3);
+	ll.mrproper();
+	ll.print_from_head();
+}
+void test_4() {
+	std::cout << "start test_4...\n";
+	while (1) {
+		List ll;
+
+		ll.add_end(1);
+		ll.add_begin(3);
+		ll.mrproper();
+		ll.print_from_head();
+
+	}
+
+}
+
+
+int main()
+{
+	test_3();
 	
 	system("pause");
 	return 0;
